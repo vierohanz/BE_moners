@@ -1,0 +1,3 @@
+apis:
+  moners.json:
+    alias: moners-restful-api

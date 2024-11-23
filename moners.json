@@ -1,0 +1,143 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "MONERS RESTFUL API",
+        "version": "1",
+        "description": "OpenAPI for Moners RESTful API",
+        "contact": {
+            "name": "Rais Hannan Rizanto",
+            "email": "rizantohannan@gmail.com"
+        },
+        "license": {
+            "name": "APACHE 2.0",
+            "url": "https://www.apache.org/licenses/LICENSE-2.0"
+        }
+    },
+    "servers": [
+        {
+            "description": "Moners RESTful API Server",
+            "url": "https://{environment}.moners.com/api",
+            "variables": {
+                "environment": {
+                    "description": "Server Environment",
+                    "default": "dev",
+                    "enum": ["dev", "qa", "prod"]
+                }
+            }
+        }
+    ],
+    "paths": {
+        "/auth/register": {
+            "post": {
+                "tags": ["Authentication"],
+                "summary": "Register a new user",
+                "description": "Creates a new user in the system and returns the user details.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "examples": {
+                                "example1": {
+                                    "description": "Example registration payload",
+                                    "value": {
+                                        "username": "Rais Hannan Rizanto",
+                                        "email": "rizantohannan@gmail.com",
+                                        "password": "password"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "User successfully registered",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "success": {
+                                        "description": "Example successful registration response",
+                                        "value": {
+                                            "id": "1",
+                                            "username": "Rais Hannan Rizanto",
+                                            "email": "rizantohannan@gmail.com"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input or validation errors",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "blankField": {
+                                        "description": "One or more required fields are blank",
+                                        "value": {
+                                            "error": "ValidationError",
+                                            "message": "The username, email, or password field is blank."
+                                        }
+                                    },
+                                    "duplicateUsername": {
+                                        "description": "The username is already registered",
+                                        "value": {
+                                            "error": "DuplicateUsername",
+                                            "message": "The username 'Rais Hannan Rizanto' is already taken. Please choose a different username."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
+        "/auth/login": {
+            "post": {
+                "tags": ["Authentication"],
+                "summary": "User login",
+                "description": "Authenticates the user and returns a JWT token.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "examples": {
+                                "example1": {
+                                    "description": "Example login payload",
+                                    "value": {
+                                        "email": "rizantohannan@gmail.com",
+                                        "password": "password"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login successful",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "success": {
+                                        "description": "Example successful login response",
+                                        "value": {
+                                            "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                                            "tokenType": "Bearer",
+                                            "expiresIn": 3600
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid credentials"
+                    }
+                }
+            }
+        }
+    }
+}
