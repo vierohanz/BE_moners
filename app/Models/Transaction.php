@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Transaction extends Model
 {
@@ -11,4 +12,9 @@ class Transaction extends Model
     protected $keyType = 'int';
     public $incrementing = true;
     public $timestamps = true;
+
+    public function userTransaction(): BelongsTo
+    {
+        return $this->belongsTo(Users::class, 'user id', 'id');
+    }
 }

@@ -18,7 +18,9 @@ return new class extends Migration
             $table->enum('category type', ['transport', 'eat', 'dating', 'others']);
             $table->string('description', 100);
             $table->timestamps();
-            $table->unsignedInteger('user id');
+            $table->unsignedBigInteger('user id');
+
+            $table->foreign('user id')->references('id')->on('users');
         });
     }
 
