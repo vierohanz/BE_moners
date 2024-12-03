@@ -8,7 +8,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Hash;
 
-class LoginRequest extends FormRequest
+class SendVerifyEmailRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,31 +26,23 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'username' => ['required', 'string'],
-            'password' => [
-                'required',
-                'string',
-                'min:8',
-                'regex:/^(?=.*[A-Z])(?=.*\d).+$/'
-            ],
+            'email' => ['required', 'email', 'exists:users,email'],
         ];
     }
 
-    public function withValidator(Validator $validator)
+    public function prepareForValidation()
     {
-        $validator->after(function ($validator) {
-            $credentials = $this->validated();
+        $user = Users::where('email', $this->email)->first();
 
-            $user = Users::where('username', $credentials['username'])
-                ->orWhere('username', $credentials['username'])
-                ->first();
+        // Check if the email is already verified
+        if ($user && $user->email_verified_at !== null) {
+            throw new HttpResponseException(response()->json([
+                'status' => 'error',
+                'massage' => 'Your email has already been verified.'
 
-            if (!$user || !Hash::check($credentials['password'], $user->password)) {
-                $validator->errors()->add('credentials', 'Invalid username or password.');
-            }
-        });
+            ], 400));
+        }
     }
-
     protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json([

@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class RegisterResources extends JsonResource
+class SendRequestPasswordResources extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,7 +16,7 @@ class RegisterResources extends JsonResource
     {
         return [
             'status' => 'success',
-            'message' => 'we are sent email verification, check your gmail',
+            'message' => 'Password reset link has been sent to your email.'
         ];
     }
 }

@@ -15,12 +15,9 @@ class ProfileResources extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'status' => [
-                'message' => 'Profile successfully'
-            ],
             'username' => $this->username,
             'name' => $this->name,
-            'email' => $this->email
+            'email' => $this->email,
         ];
     }
 }
